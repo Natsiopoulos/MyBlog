@@ -1,0 +1,625 @@
+---
+title: Three types of ANOVA
+subtitle: Understand ANOVA types and use them wisely
+author: Kleanthis Natsiopoulos
+date: '2019-02-11'
+slug: anova-types
+categories:
+  - do it right
+tags:
+  - R
+  - statistics
+image:
+  caption: 'Image credit: [**flickr**](https://www.flickr.com/photos/gwendolyn_stansbury/13933085201/in/photostream/)'
+  focal_point: 'Center'
+summary: "Even the most *basic* statistical tests like ANOVA can lead to misleading results if we don't fully understand them. Example using samara, the maple tree fruit."
+---
+
+<script src="/rmarkdown-libs/kePrint/kePrint.js"></script>
+
+
+<p>This is the first post of the series <a href="/categories/do-it-right/">do it right</a>. This series of posts is about usual misuses of methods that are supposed to be <em>basics</em> but many of us keep doing them in a wrong way.</p>
+<p>ANOVA is taught in the university as one of our first steps in statistics after some basic probability theory, distributions and t-test. It is used as a means of measuring the differences among sample means and is practically an F-test. Here we will examine the use of ANOVA (F-test) in testing nested models, or in other words, in testing whether a factor in the regression is needed or not. This is a typical step when we try to build a model but although it is a trivial routine, how many of us really consider the three types of ANOVA and apply the correct one in each case? Or even, how many know about these three different types?</p>
+<p>In this example I will use the <a href="http://www.statsci.org/data/general/samara.txt">samara dataset</a>. As Ryan et al (1994) describe:</p>
+<blockquote>
+<p>In autumn, small winged fruit called samara fall off maple trees, spinning as they go.</p>
+</blockquote>
+<p>Description of the problem:</p>
+<blockquote>
+<p>A forest scientist is interested in studying the relationship between the terminal velocity of falling maple samaras and a measure of their size and weight known as disk loading. A samara is the winged fruit that falls to the ground with a helicopter-like motion. The disk loading is a quantity related to helicopter aerodynamics. In an experiment samaras were randomly selected from each of three distinct trees (of the same species). The disk loading (loading) for each samara was determined and the terminal velocity (velocity) was measured in the laboratory. The forest scientist conducting the study hypothesizes that there is a linear relationship between terminal velocity and disk loading. <strong>The scientist wishes to determine whether the relationship is the same for each tree.</strong></p>
+</blockquote>
+<p>In other words, we want to determine whether the samara fruits fall with the same velocity from each tree, taking into account the size of the fruit in order for the comparison to be between fruits of the same size.</p>
+<p>First, lets read the data and remove the observation which has NA. Then, we turn the variable <code>Tree</code> into a factor as we want it to represent the three trees and not some arbitrary numbers.</p>
+<pre><code>library(ggplot2)
+library(gridExtra)
+library(car)</code></pre>
+<pre class="r"><code>samara &lt;- read.table(&quot;http://www.statsci.org/data/general/samara.txt&quot;, header=TRUE)
+samara &lt;- samara[complete.cases(samara), ]
+samara$Tree &lt;- as.factor(samara$Tree)</code></pre>
+<div style="border: 1px solid #ddd; padding: 5px; overflow-y: scroll; height:400px; overflow-x: scroll; width:100%; ">
+<table class="table" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:right;">
+Tree
+</th>
+<th style="text-align:right;">
+Load
+</th>
+<th style="text-align:right;">
+Velocity
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.239
+</td>
+<td style="text-align:right;">
+1.34
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.208
+</td>
+<td style="text-align:right;">
+1.06
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.223
+</td>
+<td style="text-align:right;">
+1.14
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.224
+</td>
+<td style="text-align:right;">
+1.13
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.246
+</td>
+<td style="text-align:right;">
+1.35
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.213
+</td>
+<td style="text-align:right;">
+1.23
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.198
+</td>
+<td style="text-align:right;">
+1.23
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.219
+</td>
+<td style="text-align:right;">
+1.15
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.241
+</td>
+<td style="text-align:right;">
+1.25
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.210
+</td>
+<td style="text-align:right;">
+1.24
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.224
+</td>
+<td style="text-align:right;">
+1.34
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+1
+</td>
+<td style="text-align:right;">
+0.269
+</td>
+<td style="text-align:right;">
+1.35
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+0.238
+</td>
+<td style="text-align:right;">
+1.20
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+0.206
+</td>
+<td style="text-align:right;">
+1.06
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+0.172
+</td>
+<td style="text-align:right;">
+0.88
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+0.235
+</td>
+<td style="text-align:right;">
+1.24
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+0.247
+</td>
+<td style="text-align:right;">
+1.37
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+0.239
+</td>
+<td style="text-align:right;">
+1.37
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+0.233
+</td>
+<td style="text-align:right;">
+1.43
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+0.234
+</td>
+<td style="text-align:right;">
+1.32
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+0.189
+</td>
+<td style="text-align:right;">
+0.99
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+0.192
+</td>
+<td style="text-align:right;">
+1.00
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+0.209
+</td>
+<td style="text-align:right;">
+1.12
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+2
+</td>
+<td style="text-align:right;">
+NA
+</td>
+<td style="text-align:right;">
+NA
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+0.192
+</td>
+<td style="text-align:right;">
+0.91
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+0.200
+</td>
+<td style="text-align:right;">
+1.13
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+0.175
+</td>
+<td style="text-align:right;">
+1.00
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+0.187
+</td>
+<td style="text-align:right;">
+0.98
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+0.181
+</td>
+<td style="text-align:right;">
+0.96
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+0.195
+</td>
+<td style="text-align:right;">
+0.88
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+0.155
+</td>
+<td style="text-align:right;">
+0.81
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+0.179
+</td>
+<td style="text-align:right;">
+0.91
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+0.184
+</td>
+<td style="text-align:right;">
+1.00
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+0.177
+</td>
+<td style="text-align:right;">
+0.87
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+0.177
+</td>
+<td style="text-align:right;">
+1.02
+</td>
+</tr>
+<tr>
+<td style="text-align:right;">
+3
+</td>
+<td style="text-align:right;">
+0.186
+</td>
+<td style="text-align:right;">
+0.94
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>From a simple box-plot we can see that the velocity is different between the trees. Particularly, tree 3 seems to have the lowest velocity, while trees 1 and 2 about the same. The box-plot and the scatter-plot also show that tree 2 has a wide range of velocities.</p>
+<pre class="r"><code># Box-plot
+box_plot &lt;- ggplot(samara, aes(x=Tree, y=Velocity, color=Tree)) +
+    geom_boxplot()
+
+# Scatter-plot clustered
+scatter_plot_clustered &lt;- ggplot(samara, aes(x=Load, y=Velocity, shape=Tree, color=Tree)) +
+  geom_point() + stat_ellipse()
+
+# plot together
+grid.arrange(box_plot, scatter_plot_clustered, nrow=2)</code></pre>
+<p><img src="/post/anova-types/index_files/figure-html/unnamed-chunk-1-1.png" width="672" /></p>
+<p>Is this difference in velocity because of the size of the samara fruits or the tree also affects it? Would we expect a samara of specific load to fall with the same velocity from tree 1 as it would have fallen from tree 3? As a quick answer I would say, yes, there is no magic in the trees. But lets see what statistics have to say.</p>
+<p>The first model considers only the factor <code>Tree</code>. The reference level is Tree1, and as we can see the coefficient of Tree3 is statistically significant which means that the mean velocity of Tree3 is significantly different from the mean velocity of Tree1 (the reference level) while Tree2 doesn’t differ. The ANOVA also indicates that total factor <code>Tree</code> is needed in the model as it appears to be statistically significant.</p>
+<pre class="r"><code>model_tree &lt;- lm(Velocity~Tree, data=samara)
+summary(model_tree)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = Velocity ~ Tree, data = samara)
+## 
+## Residuals:
+##       Min        1Q    Median        3Q       Max 
+## -0.300000 -0.082500  0.005833  0.087500  0.250000 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  1.23417    0.03676  33.571  &lt; 2e-16 ***
+## Tree2       -0.05417    0.05316  -1.019    0.316    
+## Tree3       -0.28333    0.05199  -5.450 5.37e-06 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.1274 on 32 degrees of freedom
+## Multiple R-squared:  0.5097, Adjusted R-squared:  0.479 
+## F-statistic: 16.63 on 2 and 32 DF,  p-value: 1.117e-05</code></pre>
+<pre class="r"><code>anova(model_tree, test=&#39;F&#39;)</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: Velocity
+##           Df  Sum Sq  Mean Sq F value    Pr(&gt;F)    
+## Tree       2 0.53942 0.269708   16.63 1.117e-05 ***
+## Residuals 32 0.51898 0.016218                      
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>But we have noticed that tree 3 has smaller fruits than the other two trees and thus with smaller load and this is probably what makes it to differe, not the tree itself.</p>
+<p>To tests this hypothesis, lets build the full model. This model consists of the variables <code>Tree</code>, <code>Load</code> but also their interaction. ANOVA indicates that the interaction is statistically insignificant (at a=5%).</p>
+<pre class="r"><code>full_model &lt;- lm(Velocity~Tree*Load, data=samara)
+summary(full_model)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = Velocity ~ Tree * Load, data = samara)
+## 
+## Residuals:
+##       Min        1Q    Median        3Q       Max 
+## -0.120023 -0.049465 -0.001298  0.049938  0.145571 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)  
+## (Intercept)   0.5414     0.2632   2.057   0.0488 *
+## Tree2        -0.8408     0.3356  -2.505   0.0181 *
+## Tree3        -0.2987     0.4454  -0.671   0.5078  
+## Load          3.0629     1.1599   2.641   0.0132 *
+## Tree2:Load    3.7343     1.5000   2.490   0.0188 *
+## Tree3:Load    0.8205     2.2837   0.359   0.7220  
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.07554 on 29 degrees of freedom
+## Multiple R-squared:  0.8436, Adjusted R-squared:  0.8167 
+## F-statistic: 31.29 on 5 and 29 DF,  p-value: 7.656e-11</code></pre>
+<pre class="r"><code>anova(full_model, test=&#39;F&#39;)</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: Velocity
+##           Df  Sum Sq  Mean Sq F value    Pr(&gt;F)    
+## Tree       2 0.53942 0.269708  47.262 7.488e-10 ***
+## Load       1 0.31554 0.315542  55.294 3.406e-08 ***
+## Tree:Load  2 0.03795 0.018975   3.325   0.05011 .  
+## Residuals 29 0.16549 0.005707                      
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>In the next model we exclude the interaction as ANOVA suggested. We notice now that controlling for the Load, the Tree3 seems to have no significant difference from the Tree1 as it is statistically insignificant. On the other hand Load does matter. But remember that the regression output shows the difference between each level and the reference level (Tree1). To know if the total factor <code>Tree</code> is needed or not we take a look at the ANOVA table where it seems that the variables <code>Tree</code> and <code>Load</code> are both significant. This means that the size of the samara fruit matters but also the tree!</p>
+<pre class="r"><code>model_tree_load &lt;- lm(Velocity~Tree + Load, data=samara)
+summary(model_tree_load)</code></pre>
+<pre><code>## 
+## Call:
+## lm(formula = Velocity ~ Tree + Load, data = samara)
+## 
+## Residuals:
+##      Min       1Q   Median       3Q      Max 
+## -0.13572 -0.06027 -0.01576  0.05973  0.17130 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)  0.07561    0.16871   0.448    0.657    
+## Tree2       -0.01047    0.03440  -0.304    0.763    
+## Tree3       -0.05879    0.04629  -1.270    0.213    
+## Load         5.12257    0.73875   6.934 8.88e-08 ***
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1
+## 
+## Residual standard error: 0.08101 on 31 degrees of freedom
+## Multiple R-squared:  0.8078, Adjusted R-squared:  0.7892 
+## F-statistic: 43.43 on 3 and 31 DF,  p-value: 3.261e-11</code></pre>
+<pre class="r"><code>anova(model_tree_load, test=&#39;F&#39;)</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: Velocity
+##           Df  Sum Sq  Mean Sq F value    Pr(&gt;F)    
+## Tree       2 0.53942 0.269708  41.098 1.913e-09 ***
+## Load       1 0.31554 0.315542  48.082 8.884e-08 ***
+## Residuals 31 0.20344 0.006563                      
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p>So, why this inconsistency of the ANOVA results? The regression results suggest that neither Tree2 nor Tree3 differ from the reference level (Tree1) but ANOVA suggests that the total factor <code>Tree</code> which has three levels (Tree1, Tree2, Tree3) is useful in the model.</p>
+<div id="the-three-types-of-anova" class="section level2">
+<h2>The three types of ANOVA</h2>
+<p><strong>Type I:</strong> SS(A), SS(B|A), SS(AB|A,B)</p>
+<p>This is what R uses by default. This means that ANOVA performs the F-test in each term sequentially starting from the first. In our previous example of the model <code>model_tree_load</code> what is done is that ANOVA first performs the F-test in the variable <code>Tree</code> and it turns out to be significant for the same reasons why ANOVA for the <code>model_tree</code> indicates the variable <code>Tree</code> as significant. This is the phase SS(A), in our case SS(Tree).</p>
+<p>After this, ANOVA tests the variable <code>Load</code> conditional on <code>Tree</code> (given <code>Tree</code>). This is the phase SS(B|A), in our case SS(Load|Tree).</p>
+<p>What is happening here is that while the regression is simultaneously taking into account both Tree and Load, ANOVA doesn’t!</p>
+<p>One solution could be to reverse the order of the variables in the regression. This way, the sequence in ANOVA is: SS(Load), SS(Tree|Load). As we can see, the total factor <code>Tree</code> accounting for the <code>Load</code> is now insignificant.</p>
+<pre class="r"><code>model_tree_load2 &lt;- lm(Velocity~Load + Tree, data=samara)
+anova(model_tree_load2, test=&#39;F&#39;)</code></pre>
+<pre><code>## Analysis of Variance Table
+## 
+## Response: Velocity
+##           Df  Sum Sq Mean Sq  F value    Pr(&gt;F)    
+## Load       1 0.84364 0.84364 128.5517 1.471e-12 ***
+## Tree       2 0.01132 0.00566   0.8626    0.4319    
+## Residuals 31 0.20344 0.00656                       
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p><strong>Type II</strong>: SS(A|B), SS(B|A)</p>
+<p>A more elegant way of doing this is to perform a type II ANOVA. This way each variable will be tested given the others. The function <code>Anova</code> from the package <code>car</code> can help us perform the type II ANOVA.</p>
+<p>One can notice that the test results for the varaibles <code>Load</code> and <code>Tree</code> are now the same as those of the type I ANOVA on the models <code>model_tree_load</code> and <code>model_tree_load2</code> accordingly, where <code>Load</code> and <code>Tree</code> are the second variable in order in each case.</p>
+<pre class="r"><code>Anova(model_tree_load, type=&quot;II&quot;, test.statistic=&#39;F&#39;)</code></pre>
+<pre><code>## Anova Table (Type II tests)
+## 
+## Response: Velocity
+##             Sum Sq Df F value    Pr(&gt;F)    
+## Tree      0.011322  2  0.8626    0.4319    
+## Load      0.315542  1 48.0817 8.884e-08 ***
+## Residuals 0.203441 31                      
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+<p><strong>Type III:</strong> SS(A|B,AB), SS(B|A,AB)</p>
+<p>The type III ANOVA differs from the type II as it also accounts for the itneraction term. In our case there is no interaction so the results for <code>Tree</code> and <code>Load</code> would be the same.</p>
+<pre class="r"><code>Anova(model_tree_load, type=&quot;III&quot;, test.statistic=&#39;F&#39;)</code></pre>
+<pre><code>## Anova Table (Type III tests)
+## 
+## Response: Velocity
+##               Sum Sq Df F value    Pr(&gt;F)    
+## (Intercept) 0.001318  1  0.2009    0.6571    
+## Tree        0.011322  2  0.8626    0.4319    
+## Load        0.315542  1 48.0817 8.884e-08 ***
+## Residuals   0.203441 31                      
+## ---
+## Signif. codes:  0 &#39;***&#39; 0.001 &#39;**&#39; 0.01 &#39;*&#39; 0.05 &#39;.&#39; 0.1 &#39; &#39; 1</code></pre>
+</div>
+<div id="conclusion" class="section level2">
+<h2>Conclusion</h2>
+<p>In conclusion, we found out that the Tree doesn’t affect the velocity, only the Load does. So for samara fruits of the same Load, the velocity would be the same for every tree. The reason why the velocity in the Tree 3 is smaller is because it has smaller fruits.</p>
+<p>Is this so important after all? Are these just details? Or is it an essential knowledge about how ANOVA works?</p>
+<p>In my opinion, the most important thing is to understand how something works. Then, it is not anymore a fuzzy type I, II, III, but a crystal clear situation where the order does matter.</p>
+<p>The previous example could be a simple toy example for undergraduate students. But we saw how easy was to produce misleading results for someone who hasn’t heard of the above.</p>
+<p>Understand it and just <a href="/categories/do-it-right/">do it right</a>!</p>
+</div>
+<div id="sources" class="section level2">
+<h2>Sources</h2>
+<p>Ryan, B.F., Joiner, B.L., and Rogosa, D. (1994). Minitab Handbook 3rd edition. Duxbury Press.</p>
+</div>

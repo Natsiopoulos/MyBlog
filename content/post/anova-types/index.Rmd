@@ -1,0 +1,155 @@
+---
+title: Three types of ANOVA
+subtitle: Understand ANOVA types and use them wisely
+author: Kleanthis Natsiopoulos
+date: '2019-02-11'
+slug: anova-types
+categories:
+  - do it right
+tags:
+  - R
+  - statistics
+image:
+  caption: 'Image credit: [**flickr**](https://www.flickr.com/photos/gwendolyn_stansbury/13933085201/in/photostream/)'
+  focal_point: 'Center'
+summary: "Even the most *basic* statistical tests like ANOVA can lead to misleading results if we don't fully understand them. Example using samara, the maple tree fruit."
+---
+
+This is the first post of the series [do it right](/categories/do-it-right/). This series of posts is about usual misuses of methods that are supposed to be *basics* but many of us keep doing them in a wrong way.
+
+ANOVA is taught in the university as one of our first steps in statistics after some basic probability theory, distributions and t-test. It is used as a means of measuring the differences among sample means and is practically an F-test. Here we will examine the use of ANOVA (F-test) in testing nested models, or in other words, in testing whether a factor in the regression is needed or not. This is a typical step when we try to build a model but although it is a trivial routine, how many of us really consider the three types of ANOVA and apply the correct one in each case? Or even, how many know about these three different types?
+
+In this example I will use the [samara dataset](http://www.statsci.org/data/general/samara.txt). As Ryan et al (1994) describe:
+
+> In autumn, small winged fruit called samara fall off maple trees, spinning as they go.
+
+Description of the problem:
+
+> A forest scientist is interested in studying the relationship between the terminal velocity of
+falling maple samaras and a measure of their size and weight known as disk loading. A
+samara is the winged fruit that falls to the ground with a helicopter-like motion. The disk
+loading is a quantity related to helicopter aerodynamics. In an experiment samaras were
+randomly selected from each of three distinct trees (of the same species). The disk loading
+(loading) for each samara was determined and the terminal velocity (velocity) was measured
+in the laboratory. The forest scientist conducting the study hypothesizes that there is a linear
+relationship between terminal velocity and disk loading. **The scientist wishes to determine
+whether the relationship is the same for each tree.**
+
+In other words, we want to determine whether the samara fruits fall with the same velocity from each tree, taking into account the size of the fruit in order for the comparison to be between fruits of the same size.
+
+```{r load-packages-hide, include=FALSE}
+library(knitr)
+library(ggplot2)
+library(gridExtra)
+library(kableExtra)
+library(car)
+library(dplyr)
+```
+
+First, lets read the data and remove the observation which has NA. Then, we turn the variable `Tree` into a factor as we want it to represent the three trees and not some arbitrary numbers.
+```
+library(ggplot2)
+library(gridExtra)
+library(car)
+```
+
+```{r read-data, echo=TRUE}
+samara <- read.table("http://www.statsci.org/data/general/samara.txt", header=TRUE)
+samara <- samara[complete.cases(samara), ]
+samara$Tree <- as.factor(samara$Tree)
+```
+
+```{r show-data, echo=FALSE}
+kable(read.table("http://www.statsci.org/data/general/samara.txt", header=TRUE)) %>% 
+    kable_styling() %>% 
+    scroll_box(width = "100%", height = "400px")
+```
+
+From a simple box-plot we can see that the velocity is different between the trees. Particularly,  tree 3 seems to have the lowest velocity, while trees 1 and 2 about the same. The box-plot and the scatter-plot also show that tree 2 has a wide range of velocities.
+
+```{r}
+# Box-plot
+box_plot <- ggplot(samara, aes(x=Tree, y=Velocity, color=Tree)) +
+    geom_boxplot()
+
+# Scatter-plot clustered
+scatter_plot_clustered <- ggplot(samara, aes(x=Load, y=Velocity, shape=Tree, color=Tree)) +
+  geom_point() + stat_ellipse()
+
+# plot together
+grid.arrange(box_plot, scatter_plot_clustered, nrow=2)
+```
+
+Is this difference in velocity because of the size of the samara fruits or the tree also affects it? Would we expect a samara of specific load to fall with the same velocity from tree 1 as it would have fallen from tree 3? As a quick answer I would say, yes, there is no magic in the trees. But lets see what statistics have to say.
+
+The first model considers only the factor `Tree`. The reference level is Tree1, and as we can see the coefficient of Tree3 is statistically significant which means that the mean velocity of Tree3 is significantly different from the mean velocity of Tree1 (the reference level) while Tree2 doesn't differ. The ANOVA also indicates that total factor `Tree` is needed in the model as it appears to be statistically significant.
+```{r}
+model_tree <- lm(Velocity~Tree, data=samara)
+summary(model_tree)
+anova(model_tree, test='F')
+```
+
+But we have noticed that tree 3 has smaller fruits than the other two trees and thus with smaller load and this is probably what makes it to differe, not the tree itself.
+
+To tests this hypothesis, lets build the full model. This model consists of the variables `Tree`, `Load` but also their interaction. ANOVA indicates that the interaction is statistically insignificant (at a=5%).
+```{r}
+full_model <- lm(Velocity~Tree*Load, data=samara)
+summary(full_model)
+anova(full_model, test='F')
+```
+
+In the next model we exclude the interaction as ANOVA suggested. We notice now that controlling for the Load, the Tree3 seems to have no significant difference from the Tree1 as it is statistically insignificant. On the other hand Load does matter. But remember that the regression output shows the difference between each level and the reference level (Tree1). To know if the total factor `Tree` is needed or not we take a look at the ANOVA table where it seems that the variables `Tree` and `Load` are both significant. This means that the size of the samara fruit matters but also the tree!
+```{r}
+model_tree_load <- lm(Velocity~Tree + Load, data=samara)
+summary(model_tree_load)
+anova(model_tree_load, test='F')
+```
+
+So, why this inconsistency of the ANOVA results? The regression results suggest that neither Tree2 nor Tree3 differ from the reference level (Tree1) but ANOVA suggests that the total factor `Tree` which has three levels (Tree1, Tree2, Tree3) is useful in the model.
+
+## The three types of ANOVA
+
+**Type I:** SS(A), SS(B|A), SS(AB|A,B)
+
+This is what R uses by default. This means that ANOVA performs the F-test in each term sequentially starting from the first. In our previous example of the model `model_tree_load` what is done is that ANOVA first performs the F-test in the variable `Tree` and it turns out to be significant for the same reasons why ANOVA for the `model_tree` indicates the variable `Tree` as significant. This is the phase SS(A), in our case SS(Tree).
+
+After this, ANOVA tests the variable `Load` conditional on `Tree` (given `Tree`). This is the phase SS(B|A), in our case SS(Load|Tree).
+
+What is happening here is that while the regression is simultaneously taking into account both Tree and Load, ANOVA doesn't!
+
+One solution could be to reverse the order of the variables in the regression. This way, the sequence in ANOVA is: SS(Load), SS(Tree|Load). As we can see, the total factor `Tree` accounting for the `Load` is now insignificant.
+
+```{r}
+model_tree_load2 <- lm(Velocity~Load + Tree, data=samara)
+anova(model_tree_load2, test='F')
+```
+
+**Type II**: SS(A|B), SS(B|A)
+
+A more elegant way of doing this is to perform a type II ANOVA. This way each variable will be tested given the others. The function `Anova` from the package `car` can help us perform the type II ANOVA.
+
+One can notice that the test results for the varaibles `Load` and `Tree` are now the same as those of the type I ANOVA on the models `model_tree_load` and `model_tree_load2` accordingly, where `Load` and `Tree` are the second variable in order in each case.
+```{r}
+Anova(model_tree_load, type="II", test.statistic='F')
+```
+
+**Type III:** SS(A|B,AB), SS(B|A,AB)
+
+The type III ANOVA differs from the type II as it also accounts for the itneraction term. In our case there is no interaction so the results for `Tree` and `Load` would be the same.
+```{r}
+Anova(model_tree_load, type="III", test.statistic='F')
+```
+
+## Conclusion
+In conclusion, we found out that the Tree doesn't affect the velocity, only the Load does. So for samara fruits of the same Load, the velocity would be the same for every tree. The reason why the velocity in the Tree 3 is smaller is because it has smaller fruits.
+
+Is this so important after all? Are these just details? Or is it an essential knowledge about how ANOVA works?
+
+In my opinion, the most important thing is to understand how something works. Then, it is not anymore a fuzzy type I, II, III, but a crystal clear situation where the order does matter.
+
+The previous example could be a simple toy example for undergraduate students. But we saw how easy was to produce misleading results for someone who hasn't heard of the above.
+
+Understand it and just [do it right](/categories/do-it-right/)!
+
+## Sources
+Ryan, B.F., Joiner, B.L., and Rogosa, D. (1994). Minitab Handbook 3rd edition. Duxbury Press.
