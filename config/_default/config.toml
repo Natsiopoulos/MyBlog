@@ -27,7 +27,7 @@ disqusShortname = ""
 
 # Name of Academic theme folder in `themes/`.
 theme = "hugo-academic"
-#$#$ Old version had: theme = "hugo-academic"
+#$#$ ATENTION! Don't set it into "academic" (default). It gets deployed localy but not on Netlify!
 
 # Get last modified date for content from Git?
 enableGitInfo = false
