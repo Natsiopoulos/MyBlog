@@ -10,3 +10,6 @@
 
 # RStudio files
 .Rproj.user/
+
+# Don't want the public folder in GitHub
+.public
