@@ -17,7 +17,7 @@ summary: "Even the most *basic* statistical tests like ANOVA can lead to mislead
 
 This is the first post of the series [do it right](/categories/do-it-right/). This series of posts is about usual misuses of methods that are supposed to be *basics* but many of us keep doing them in a wrong way.
 
-ANOVA is taught in the university as one of our first steps in statistics after some basic probability theory, distributions and t-test. It is used as a means of measuring the differences among sample means and is practically an F-test. Here we will examine the use of ANOVA (F-test) in testing nested models, or in other words, in testing whether a factor in the regression is needed or not. This is a typical step when we try to build a model but although it is a trivial routine, how many of us really consider the three types of ANOVA and apply the correct one in each case? Or even, how many know about these three different types?
+ANOVA is taught in the university as one of our first steps in statistics after some basic probability theory, distributions and t-test. It is used as a means of measuring the differences among sample means and is practically an F-test. Here we will examine the use of ANOVA (F-test) in testing nested models, or in other words, in testing whether a factor in the regression is needed or not. This is a typical step when we try to build a model but although it is a trivial routine, how many of us really consider the three types of ANOVA and apply the correct one in each case? Or even, how many know about these three different types?s
 
 In this example I will use the [samara dataset](http://www.statsci.org/data/general/samara.txt). As Ryan et al (1994) describe:
 
