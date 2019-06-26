@@ -18,7 +18,7 @@ summary: "Even the most *basic* statistical tests like ANOVA can lead to mislead
 <script src="/rmarkdown-libs/kePrint/kePrint.js"></script>
 
 
-<p>This is the first post of the series <a href="/categories/do-it-right/">do it right</a>. This series of posts is about usual misuses of methods that are supposed to be <em>basics</em> but many of us keep doing them in a wrong way.</p>
+<p>This is the first post of the series <a href="/categories/do-it-right/">do it right</a>. This series consist of posts that aim to give an alternative and simple view on usual misunderstandings and misuses of methods.</p>
 <p>ANOVA is taught in the university as one of our first steps in statistics after some basic probability theory, distributions and t-test. It is used as a means of measuring the differences among sample means and is practically an F-test. Here we will examine the use of ANOVA (F-test) in testing nested models, or in other words, in testing whether a factor in the regression is needed or not. This is a typical step when we try to build a model but although it is a trivial routine, how many of us really consider the three types of ANOVA and apply the correct one in each case? Or even, how many know about these three different types?</p>
 <p>In this example I will use the <a href="http://www.statsci.org/data/general/samara.txt">samara dataset</a>. As Ryan et al (1994) describe:</p>
 <blockquote>
@@ -617,7 +617,7 @@ anova(model_tree_load2, test=&#39;F&#39;)</code></pre>
 <p>Is this so important after all? Are these just details? Or is it an essential knowledge about how ANOVA works?</p>
 <p>In my opinion, the most important thing is to understand how something works. Then, it is not anymore a fuzzy type I, II, III, but a crystal clear situation where the order does matter.</p>
 <p>The previous example could be a simple toy example for undergraduate students. But we saw how easy was to produce misleading results for someone who hasn’t heard of the above.</p>
-<p>Understand it and just <a href="/categories/do-it-right/">do it right</a>!</p>
+<p>Next time, <a href="/categories/do-it-right/">do it right</a>!</p>
 </div>
 <div id="sources" class="section level2">
 <h2>Sources</h2>
