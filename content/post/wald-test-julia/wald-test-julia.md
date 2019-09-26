@@ -1,0 +1,328 @@
+---
+title: Wald-test function in Julia
+subtitle: Wald test. Julia vs R and F vs Chi-square distribution
+author: Kleanthis Natsiopoulos
+date: '2019-09-25'
+slug: wald-julia
+tags:
+  - R
+  - Julia
+  - statistics
+image:
+  caption: 'Image credit: [**Louisios Mpirlifis**](louisios-mpirlifis)'
+  focal_point: 'Center'
+summary: "A new function for wald-test in Julia. Comparison with the R code and examples using Chi-square and F tests."
+---
+
+It all started when I was trying to do some joint restriction on the regression’s coefficients… in Julia… and I failed… And this is because there is no function (at least yet) to perform a Wald test on the estimated regression model. So I made it! In short, I just rewrote the `wald.test` function from the `aod` package in R, and created a new function for Julia. It’s called, guess what… `wald_test`.
+
+For those already familiar with the `wald.test` from the `aod` package in R, the `wald_test` function in Julia works exactly the same way. For anyone who is interested, you can download the Julia function from here[github].
+
+The rest of the article shows some examples of regression coefficient restrictions using the wald test, first implementing in R and then in Julia.
+
+1. The first example is a simple joint restriction.
+2. In the second example we also jointly restrict all the regression coefficients except of the intercept to 0, which is practically the standard F test of a regression.
+3. Finally, in the third example, we include the intercept in the restricted coefficients.
+
+Through these examples, we explore the relationship between the F and the $\chi^2$ distribution, we solve a single problem using 2 different tests (ANOVA (F-test) and Wald ($\chi^2$-test)) and we will also show how these tests do not always both work, and this is how the need for this function in Julia was born.
+
+## Packages and data
+
+First things first. Let’s get ready with the packages and the data we are going to use.
+
+In R, the dataset `iris` is already loaded in the object `iris` and we will also need the package `aod` which contains the `wald.test` function.
+
+In Julia, we will need to load the package `RDatasets` for the iris dataset, the package `DataFrames` in order to work with dataframes and the package `GLM` for the `ftest` function.
+
+Oh, and don’t forget our new function `wald_test`! Assuming you have already downloaded the `wald_test.jl` file, all you have to do is to load it too[^1].
+
+[^1]: The `wald_test` function requires the `Distributions` package which is loaded automatically upon the inclusion of the `wald_test.jl` file.
+
+**R:**
+
+```r
+library(aod)
+```
+
+
+```{r, include = FALSE}
+library(knitr)
+```
+
+
+```{r, echo = FALSE}
+kable(iris)
+```
+
+
+**Julia:**
+
+
+```julia
+using RDatasets, DataFrames, GLM
+include("wald_test.jl")
+iris = dataset("datasets", "iris");
+```
+
+## 1. Joint restrictions
+
+First let’s form a regression model using the `iris` dataset and name it `model`.
+
+**R:**
+
+
+```r
+model <- lm(Sepal.Length ~ Petal.Length + Petal.Width, iris)
+summary(model)
+```
+
+
+**Julia:**
+
+
+```julia
+model = lm(@formula(SepalLength ~ PetalLength + PetalWidth), iris)
+```
+
+
+
+
+    
+    SepalLength ~ 1 + PetalLength + PetalWidth
+    
+    Coefficients:
+    ──────────────────────────────────────────────────────────────────────────────
+                  Estimate  Std. Error   t value  Pr(>|t|)  Lower 95%    Upper 95%
+    ──────────────────────────────────────────────────────────────────────────────
+    (Intercept)   4.19058    0.0970459  43.1815     <1e-84   3.9988     4.38237   
+    PetalLength   0.541777   0.0692818   7.81991    <1e-12   0.40486    0.678694  
+    PetalWidth   -0.319551   0.160453   -1.99156    0.0483  -0.636642  -0.00245875
+    ──────────────────────────────────────────────────────────────────────────────
+
+
+
+As you notice, our model includes 2 regressors and an intercept. We also notice that the estimated coefficient of the variable PetalLength is statistically significant with a p-value close to 0, while the variable PetalWidth is statistically insignificant (at 1% significance level) having a p-value = 0.048.
+
+In this situation, assume that we want to test whether the coefficients of these variables are jointly significant different than 0.
+
+To do so, we perform a wald test on both of the coefficients.
+
+**R:**
+
+
+```r
+wald_results <- wald.test(Sigma = vcov(model), b = coef(model), Terms = 2:3)
+wald_results
+```
+
+
+**Julia:**
+
+
+```julia
+wald_results = wald_test(Sigma = vcov(model), b = coef(model), Terms = 2:3)
+```
+
+    Wald test:
+    ----------
+    
+    Chi-squared test:
+    X2 = 481.90740153204536, df = 2, P(> X2) = 2.265360705998325e-105
+
+
+
+## 2. Joint restrictions of all the coefficients except of the intercept
+
+For this example, we will create a new variable which is going to be the square of Sepal Length (`SepalLength2`) and we will fit a new model.
+
+**R:**
+
+
+```r
+iris <- data.frame(iris, Sepal.Length2 = iris$Sepal.Length^2)
+model2 <- lm(Sepal.Width ~ Sepal.Length + Sepal.Length2, iris)
+```
+
+```{r, echo = FALSE}
+kable(iris)
+```
+
+
+**Julia:**
+
+
+```julia
+iris[:SepalLength2] = iris.SepalLength .^ 2
+model2 = lm(@formula(SepalWidth ~ SepalLength + SepalLength2), iris)
+```
+
+    
+    SepalWidth ~ 1 + SepalLength + SepalLength2
+    
+    Coefficients:
+    ─────────────────────────────────────────────────────────────────────────────────
+                    Estimate  Std. Error   t value  Pr(>|t|)    Lower 95%   Upper 95%
+    ─────────────────────────────────────────────────────────────────────────────────
+    (Intercept)    6.41584      1.58499    4.04787    <1e-4    3.28352      9.54815  
+    SepalLength   -1.08556      0.536246  -2.02437    0.0447  -2.14531     -0.0258139
+    SepalLength2   0.0857066    0.044755   1.91502    0.0574  -0.00273979   0.174153 
+    ─────────────────────────────────────────────────────────────────────────────────
+
+
+
+In essence, this is the F-test which is most of the times printed at the bottom of a regression accompanied by its degrees of freedom and the p-value. This test informs us, whether the regressors are jointly equal to zero, and thus if the regression as a whole is useless. In fact, in this case, simply the (unconditional) mean of the dependent variable would have been as good predictor as all of these variables together.
+
+In R, so far so good. As you can see, at the bottom line of `summary(model2)` we have what we want.
+
+**R:**
+
+
+```r
+summary(model2)
+```
+
+
+On the other hand, the regression output in Julia doesn’t provide so much information. To retrieve the information about the F-test we will need to do the following things. What we are actually going to do is to use ANOVA which is an F-test and compare our model (sometimes called full model) with the null model which is a regression without any independent variables except from the constant term. So, first we have to create the null model and then perform an F-test (ANOVA) comparing these two models (using the `ftest` function from the GLM package).
+
+**Julia:**
+
+
+```julia
+nullmodel2 = lm(@formula(SepalWidth ~ 1), iris)
+ftest(model2.model, nullmodel2.model)
+```
+
+
+
+
+            Res. DOF DOF ΔDOF     SSR    ΔSSR     R²    ΔR²     F*  p(>F)
+    Model 1      147   4      27.2362         0.0378                     
+    Model 2      149   2   -2 28.3069 -1.0708 0.0000 0.0378 2.8895 0.0588
+    
+
+
+
+ Speaking about Julia, not so straight forward, right? Now, what if we could skip all this workaround and just perform a restriction, jointly to all the coefficients except from the intercept? That’s right! We can use our new Julia function `wald_test` exactly the same way as we did before.
+
+**Julia:**
+
+
+```julia
+wald_results = wald_test(Sigma = vcov(model2), b = coef(model2), Terms = 2:3)
+```
+
+    Wald test:
+    ----------
+    
+    Chi-squared test:
+    X2 = 5.779097987201187, df = 2, P(> X2) = 0.05560128349216448
+
+
+
+But as you are about to notice, our result is a Chi square (Χ^2) test instead of an F-test. If we want to see the equivalent F-test, using some basic knowledge from distribution theory, we can go from a Chi square distribution to an F distribution using the following formula:
+
+$$\frac{\chi^2}{df} = F$$
+
+Where the degrees of freedom from the Chi square distribution is the number of restrictions, and this is also the numerator degrees of freedom from the equivalent F distribution.
+
+**Julia:**
+
+
+```julia
+wald_chi2 = wald_results.result["chi2"].chi2
+wald_df = wald_results.result["chi2"].df
+fstat = wald_chi2 / wald_df
+```
+
+
+
+
+    2.8895489936005934
+
+
+
+Now that we have the F statistic, we could calculate the p-value which corresponds to the value of the F statistic on the pdf (probability density function) of the F distribution. But this is already too much work for something like this… Once again, we can skip this mess just by asking our new `wald_test` function to perform an F test for our joint restrictions. All we need is to add the denominator degrees of freedom `dendf`.
+
+**Julia:**
+
+
+```julia
+dendf = nrow(iris)-length(coef(model2))
+wald_results = wald_test(Sigma = vcov(model2), b = coef(model2), Terms = 2:3, df = dendf)
+```
+
+    Wald test:
+    ----------
+    
+    Chi-squared test:
+    X2 = 5.779097987201187, df = 2, P(> X2) = 0.05560128349216448
+    
+    F test:
+    W = 2.8895489936005934, df1 = 2, df2 = 147, P(> W) = 0.05876576520988747
+
+
+
+As you notice, the p-values of the $x^2$ and the F tests are very close but not identical. But as the denominator degrees of freedom is getting larger (i.e. as the number of observations rises or the number of coefficients is getting smaller), the p-value of the F test is getting closer and closer to the p-value of the $x^2$ test.
+
+## 3. Joint restrictions of all the coefficients including the intercept
+
+When I faced the previous problem I thought I could take the long way and perform an ANOVA, just to get the job done. That was until I faced the next problem. Consider the problem where you want to test whether all the regression’s coefficients including the intercept are jointly equal to zero. What is the null model in this case? It’s not even the sample mean of the dependent variable as in the previous case. And would it even be nested to our full model? This is the situation which led me to create the wald test function for Julia.
+
+See how easy it is to test if all the coefficients are equal to 0 or whether the intercept, the first and the second coefficients are respectively equal to 4.2, 0.54 and -0.3. In both cases, the $x^2-test$and the F-test come to the same conclusion.
+
+**Julia:**
+
+
+```julia
+model
+```
+
+    
+    SepalLength ~ 1 + PetalLength + PetalWidth
+    
+    Coefficients:
+    ──────────────────────────────────────────────────────────────────────────────
+                  Estimate  Std. Error   t value  Pr(>|t|)  Lower 95%    Upper 95%
+    ──────────────────────────────────────────────────────────────────────────────
+    (Intercept)   4.19058    0.0970459  43.1815     <1e-84   3.9988     4.38237   
+    PetalLength   0.541777   0.0692818   7.81991    <1e-12   0.40486    0.678694  
+    PetalWidth   -0.319551   0.160453   -1.99156    0.0483  -0.636642  -0.00245875
+    ──────────────────────────────────────────────────────────────────────────────
+
+
+
+
+```julia
+dendf = nrow(iris)-length(coef(model))
+wald_results = wald_test(Sigma = vcov(model), b = coef(model), Terms = 1:3, df = dendf).result
+```
+
+    Wald test:
+    ----------
+    
+    Chi-squared test:
+    X2 = 32008.931513284944, df = 3, P(> X2) = 0.0
+    
+    F test:
+    W = 10669.643837761649, df1 = 3, df2 = 147, P(> W) = 1.0022050012971983e-171
+
+
+
+```julia
+wald_results = wald_test(Sigma = vcov(model), b = coef(model), Terms = 1:3, H0 = [4.2, 0.54, -0.3], df = dendf).result
+```
+
+    Wald test:
+    ----------
+    
+    Chi-squared test:
+    X2 = 0.763308780543053, df = 3, P(> X2) = 0.858221426416421
+    
+    F test:
+    W = 0.25443626018101767, df1 = 3, df2 = 147, P(> W) = 0.8580771658399398
+
+
+
+Feel free to download, modify and use the code!
+
+Comments of all kinds are more than welcome!
