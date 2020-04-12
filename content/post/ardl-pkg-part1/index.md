@@ -1,18 +1,15 @@
----
-title: "The new 'ARDL' R package. Part 1: Bounds-test advantages"
-subtitle: "Why to use the new 'ARDL' R package"
-author: Kleanthis Natsiopoulos
-date: '2020-04-13'
-slug: ardl-pkg-part1
-categories: []
-tags:
-  - R
-  - econometrics
-image:
-  caption: 'Image credit: [**Nikos Chatsios**](https://www.deviantart.com/favloskyknos)'
-  focal_point: 'Center'
-summary: "The advantages of using the new 'ARDL' R package for the bounds-test for cointegration."
----
++++
+title = "The new 'ARDL' R package. Part 1: Bounds-test advantages"
+subtitle = "Why to use the new 'ARDL' R package"
+summary = "The advantages of using the new 'ARDL' R package for the bounds-test for cointegration."
+author = "Kleanthis Natsiopoulos"
+date = '2020-04-13'
+slug = "ardl-pkg-part1"
+categories = ["R", "econometrics"]
+[image]
+  caption = "Image credit: [**Nikos Chatsios**](https://www.deviantart.com/favloskyknos)"
+  focal_point = "Center"
++++
 
 I am glad to anounce that my new [`ARDL`](https://CRAN.R-project.org/package=ARDL) package has been published on CRAN! This is part of my Ph.D. at the University of Thessaly under the supervision of the [Associate Professor Nickolaos Tzeremes](https://sites.google.com/site/tzeremesn/).
 
