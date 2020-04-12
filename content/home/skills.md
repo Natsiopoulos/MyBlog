@@ -19,7 +19,7 @@ weight = 12
   icon = "book"
   icon_pack = "fas"
   name = "Research"
-  description = "High quality academic publications"
+  description = "My academic publications"
   
 [[feature]]
   icon = "chart-line"

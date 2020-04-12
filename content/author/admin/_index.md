@@ -36,7 +36,7 @@ user_groups = ["Researchers", "Visitors"]
 
 # List qualifications (such as academic degrees)
 [[education.courses]]
-  course = "PhD in Machine Learning and Econometrics in Economics"
+  course = "PhD in Econometrics and Computational Statistics in Economics"
   institution = "University of Thessaly"
   year = "2019-"
 
@@ -66,6 +66,11 @@ user_groups = ["Researchers", "Visitors"]
   link = "https://www.linkedin.com/in/kleanthis-natsiopoulos"
 
 [[social]]
+  icon = "twitter"
+  icon_pack = "fab"
+  link = "https://twitter.com/klnatsio"
+
+[[social]]
   icon = "researchgate"
   icon_pack = "ai"
   link = "https://www.researchgate.net/profile/Kleanthis_Natsiopoulos"
@@ -90,8 +95,10 @@ user_groups = ["Researchers", "Visitors"]
 
 +++
 
+<!---
 {{% alert note %}}
 The URL of this page is going to change soon!
 {{% /alert %}}
+-->
 
 My name is Kleanthis Natsiopoulos. I live in Greece and my academic background is in Economics and Statistics, while I have worked as a Data Analyst in the oil and shipping industry. Currently, I am a Ph.D. Candidate in Economics at the University of Thessaly. My broad research interests include econometrics, machine learning, computational economics, statistics but most of all the combination of the above.

@@ -19,17 +19,18 @@ date_format = "January 2006"
 #   Leave `date_end` empty if it's your current employer.
 #   Begin/end multi-line descriptions with 3 quotes `"""`.
 [[experience]]
-  title = "Junior Data Analyst"
-  company = "[Signal Ocean](https://www.signalocean.com/) and [OilX](https://oilx.co/)"
+  title = "Data Analyst"
+  company = "[Signal Ocean](https://www.signalocean.com/) (member of the [OilX](https://oilx.co/) team)"
   company_url = ""
   location = "Athens"
   date_start = "2017-08-28"
   date_end = "2018-11-30"
   description = """
-  Worked in the industry of:
+  Major activities:
   
-  * Shipping, as a member of the [Signal Ocean](https://www.signalocean.com/) company
-  * Oil, as a member of the [OilX](https://oilx.co/) company
+  * Design and development of methodology and the main software
+  * Design and implementation of predictive models
+  * Automated benchmarking, anomaly detection, KPIs and QA process and dashboards
   """
 
 +++
