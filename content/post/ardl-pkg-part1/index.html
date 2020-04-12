@@ -1,0 +1,85 @@
+---
+title: "The new 'ARDL' R package. Part 1: Bounds-test advantages"
+subtitle: "Why to use the new 'ARDL' R package"
+author: Kleanthis Natsiopoulos
+date: '2020-04-13'
+slug: ardl-pkg-part1
+categories: []
+tags:
+  - R
+  - econometrics
+image:
+  caption: 'Image credit: [**Nikos Chatsios**](https://www.deviantart.com/favloskyknos)'
+  focal_point: 'Center'
+summary: "The advantages of using the new 'ARDL' R package for the bounds-test for cointegration."
+---
+
+
+
+<p>I am glad to anounce that my new <a href="https://CRAN.R-project.org/package=ARDL"><code>ARDL</code></a> package has been published on CRAN! This is part of my Ph.D. at the University of Thessaly under the supervision of the <a href="https://sites.google.com/site/tzeremesn/">Associate Professor Nickolaos Tzeremes</a>.</p>
+<p>The <code>ARDL</code> package functionality consists mainly of three things (more to come in future updates):</p>
+<ol style="list-style-type: decimal">
+<li><p>Dynamic time-series regression models (ARDL and ECM)</p></li>
+<li><p>Bounds-test for cointegration (<a href="https://onlinelibrary.wiley.com/doi/abs/10.1002/jae.616">Pesaran et al. (2001)</a>)</p></li>
+<li><p>Long-run multipliers (short-run and interim multipliers are comming in the next update)</p></li>
+</ol>
+<p>The first one provides an easy and straight forward way to construct complex Autoregressive Distributed Lag (ARDL) and Error Correction Models (ECM). But most of all, it ensures the accuracy and the quality of the resulted models! This can be achieved as it is not prompt to user errors and doesn’t expect from the user to know the exact technical details of the model specification. The only thing the user has to do is to set the type of the model and the appropriate model specification will be automatically computed.</p>
+<p>E.g. an ARDL model can be explicitly described by its order, say ARDL(3,1,3,2). So the user asks for an ARDL(3,1,3,2) without having to know its structure which would be of the following form (assuming a constant and linear trend as an example):</p>
+<p><span class="math display">\[y_{t} = c_{0} + c_{1}t + \sum_{i=1}^{3}b_{y,i}y_{t-i} + \sum_{j=1}^{3}\sum_{l=0}^{q_{j}}b_{j,l}x_{j,t-l} + \epsilon_{t}\]</span></p>
+<p><span class="math display">\[where \; q_{1}=1, q_{2}=3, q_{3}=2\]</span></p>
+<p>More about this topic and the usage of multipliers will follow in next posts.</p>
+<p>Part 1, focuses on the other main functionality of the package. The bounds-test.</p>
+<div id="bounds-test-for-cointegration" class="section level2">
+<h2>Bounds-test for cointegration</h2>
+<p>It refers to the famous test<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> proposed by <a href="https://onlinelibrary.wiley.com/doi/abs/10.1002/jae.616">Pesaran, Shin and Smith (2001)</a>.</p>
+<p>The rising usage of the test and the fact that there was not yet (despite the vast demand of the test) a <strong>complete</strong> and <strong>reliable</strong> package for this purpose in R, led me to create it!<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a>.</p>
+<p>So let’s take a quick look on the advantages of using the <a href="https://CRAN.R-project.org/package=ARDL"><code>ARDL</code></a> package to perform the bounds-test.</p>
+</div>
+<div id="advantages" class="section level2">
+<h2>Advantages</h2>
+<div id="the-reliable-underlying-models" class="section level3">
+<h3>1. The reliable underlying models</h3>
+<p>The main building block to perform the bounds-test is the conditional ECM of the underlying ARDL model, as the test itself is actually a joint wald-test on some parameters of the ECM. So having a correctly specified ARDL model <strong>and</strong> its conditional ECM is essential in order to proceed to the test!</p>
+<p>Luckily, this is exactly what the <a href="https://CRAN.R-project.org/package=ARDL"><code>ARDL</code></a> package does!</p>
+</div>
+<div id="both-the-f-test-and-the-t-test-are-available" class="section level3">
+<h3>2. Both the F-test and the t-test are available</h3>
+<p>The bounds-test consists of two tests, the F-test and the t-test. The t-test is a subset of the F-test and both of them have to be performed in order to have a clear conclusion.</p>
+</div>
+<div id="p-values-and-critical-value-bounds" class="section level3">
+<h3>3. P-values and critical value bounds</h3>
+<p>The bounds-test is already available in some commercial software. Although, they only provide the critical value bounds for a specific level of statistical significance, but sadly the usual case is that only the 1%, 5% and 10% levels of significance are available. The <a href="https://CRAN.R-project.org/package=ARDL"><code>ARDL</code></a> package provides critical value bounds for <strong>any</strong> significance level!</p>
+<p>More over, <strong>p-values</strong> are available in the <a href="https://CRAN.R-project.org/package=ARDL"><code>ARDL</code></a> package!</p>
+</div>
+<div id="exact-sample-and-asymptotic-tests" class="section level3">
+<h3>4. Exact sample and asymptotic tests</h3>
+<p>Again, in comparison with other commercial and non-commercial software that only provide asymptotic results, the <a href="https://CRAN.R-project.org/package=ARDL"><code>ARDL</code></a> package also provides <strong>exact sample</strong> p-values and critical value bounds! This is useful in cases where we have limited data. The asymptotic results (offered by <a href="https://onlinelibrary.wiley.com/doi/abs/10.1002/jae.616">Pesaran et al. (2001)</a>) assume that our dataset consists of 1000 observations. The truth is that in economics, social science etc we don’t have time-series that long. We usually have much less than this (e.g. series like the GDP is hard to be more than 100 observations long), and in this case the problem is even more severe as the asymptotic results would be very far from the truth.</p>
+</div>
+<div id="cointegrating-equation-long-run-relationship" class="section level3">
+<h3>5. Cointegrating equation (long-run relationship)</h3>
+<p>Also, the user can extract the long-run relationship (cointegrating equation) and examine how this fits the original data and graphically check for a degenerate relationship, that can’t be seen using just the test.</p>
+</div>
+</div>
+<div id="conclusion" class="section level2">
+<h2>Conclusion</h2>
+<p>This is just one of the package features and just few of its advantages are mentioned here.</p>
+<p>Explore more in the <a href="https://github.com/Natsiopoulos/ARDL/blob/master/README.md">README</a> file!</p>
+<p>Feel free to leave a comment below or contact me via e-mail, <a href="www.linkedin.com/in/kleanthis-natsiopoulos">linkedin</a> or <a href="https://twitter.com/klnatsio">twitter</a> to request an extra functionality to be included in the pacakge, report any bug or error, or just express your experience using the package!</p>
+<p>If you use <a href="https://CRAN.R-project.org/package=ARDL"><code>ARDL</code></a> in your publications, please cite as:</p>
+<p>Natsiopoulos K, Tzeremes N (2020). <em>ARDL: ARDL, ECM and Bounds-Test for Cointegration</em>. Ph.D. thesis, University of Thessaly, Department of Economics. R package version 0.1.0</p>
+</div>
+<div id="why-to-use-the-ardl-package-in-your-publications" class="section level2">
+<h2>Why to use the <code>ARDL</code> package in your publications</h2>
+<p>Probably the most valuable part of the pacakge. The answer is coming soon in a future update! Stay tuned!</p>
+</div>
+<div id="references" class="section level2">
+<h2>References</h2>
+<p>Pesaran, M. H., Shin, Y., &amp; Smith, R. J. (2001). Bounds testing approaches to the analysis of level relationships. <em>Journal of Applied Econometrics</em>, 16(3), 289-326</p>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>11664 citations on Google Scholar by the time of this post.<a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>Note that there are a few packages (on CRAN or in github repos) that provide the test but as we said… <strong>completeness and reliability of results</strong>!<a href="#fnref2">↩</a></p></li>
+</ol>
+</div>

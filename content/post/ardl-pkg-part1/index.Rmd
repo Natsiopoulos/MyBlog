@@ -1,15 +1,18 @@
-+++
-title = "The new 'ARDL' R package. Part 1: Bounds-test advantages"
-subtitle = "Why to use the new 'ARDL' R package"
-summary = "The advantages of using the new 'ARDL' R package for the bounds-test for cointegration."
-author = "Kleanthis Natsiopoulos"
-date = '2020-04-13'
-slug = "ardl-pkg-part1"
-categories = ["R", "econometrics"]
-[image]
-  caption = "Image credit: [**Nikos Chatsios**](https://www.deviantart.com/favloskyknos)"
-  focal_point = "Center"
-+++
+---
+title: "The new 'ARDL' R package. Part 1: Bounds-test advantages"
+subtitle: "Why to use the new 'ARDL' R package"
+author: Kleanthis Natsiopoulos
+date: '2020-04-13'
+slug: ardl-pkg-part1
+categories: []
+tags:
+  - R
+  - econometrics
+image:
+  caption: 'Image credit: [**Nikos Chatsios**](https://www.deviantart.com/favloskyknos)'
+  focal_point: 'Center'
+summary: "The advantages of using the new 'ARDL' R package for the bounds-test for cointegration."
+---
 
 I am glad to anounce that my new [`ARDL`](https://CRAN.R-project.org/package=ARDL) package has been published on CRAN! This is part of my Ph.D. at the University of Thessaly under the supervision of the [Associate Professor Nickolaos Tzeremes](https://sites.google.com/site/tzeremesn/).
 
@@ -25,9 +28,9 @@ The first one provides an easy and straight forward way to construct complex Aut
 
 E.g. an ARDL model can be explicitly described by its order, say ARDL(3,1,3,2). So the user asks for an ARDL(3,1,3,2) without having to know its structure which would be of the following form (assuming a constant and linear trend as an example):
 
-<p><span class="math display">\[y_{t} = c_{0} + c_{1}t + \sum_{i=1}^{3}b_{y,i}y_{t-i} + \sum_{j=1}^{3}\sum_{l=0}^{q_{j}}b_{j,l}x_{j,t-l} + \epsilon_{t}\]</span></p>
+$$y_{t} = c_{0} + c_{1}t + \sum_{i=1}^{3}b_{y,i}y_{t-i} + \sum_{j=1}^{3}\sum_{l=0}^{q_{j}}b_{j,l}x_{j,t-l} + \epsilon_{t}$$
 
-<p><span class="math display">\[where \; q_{1}=1, q_{2}=3, q_{3}=2\]</span></p>
+$$where \; q_{1}=1, q_{2}=3, q_{3}=2$$
 
 More about this topic and the usage of multipliers will follow in next posts.
 
