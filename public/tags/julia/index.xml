@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Julia on Kleanthis Natsiopoulos</title>
+    <link>/tags/julia/</link>
+    <description>Recent content in Julia on Kleanthis Natsiopoulos</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>&amp;copy; 2020</copyright>
+    <lastBuildDate>Thu, 26 Sep 2019 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/tags/julia/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Wald-test function in Julia</title>
+      <link>/post/wald-test-julia/wald-test-julia/</link>
+      <pubDate>Thu, 26 Sep 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/post/wald-test-julia/wald-test-julia/</guid>
+      <description>It all started when I was trying to do some joint restriction on the regression’s coefficients… in Julia… and I failed… And this is because there is no function (at least yet) to perform a Wald test on the estimated regression model. So I made it! In short, I just rewrote the wald.test function from the aod package in R, and created a new function for Julia. It’s called, guess what… wald_test.</description>
+    </item>
+    
+  </channel>
+</rss>
