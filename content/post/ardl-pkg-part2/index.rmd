@@ -1,5 +1,5 @@
 ---
-title: "'ARDL'' R package v0.1.1 Part 2: Multipliers"
+title: "'ARDL' R package v0.1.1 Part 2: Multipliers"
 author: "Kleanthis Natsiopoulos"
 date: '2021-01-25'
 image:
