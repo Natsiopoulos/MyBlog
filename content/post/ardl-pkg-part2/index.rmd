@@ -3,7 +3,7 @@ title: "'ARDL' R package v0.1.1 Part 2: Multipliers"
 author: "Kleanthis Natsiopoulos"
 date: '2021-01-25'
 image:
-  caption: 'Image credit: [**Nikos Chatsios**](https://www.deviantart.com/favloskyknos)'
+  caption: 'Image credit: [**Nikos Chatsios**](https://www.instagram.com/favlos_kyknos/)'
   focal_point: Center
 slug: ardl-pkg-part2
 subtitle: Long, short and interim multipliers
