@@ -1,5 +1,5 @@
 ---
-title: "'ARDL' R package v0.1.1 Part 2: Multipliers"
+title: '''ARDL'' R package v0.1.1 Part 2: Multipliers'
 author: "Kleanthis Natsiopoulos"
 date: '2021-01-25'
 image:
@@ -22,13 +22,13 @@ The next versions are going to be released frequently, and they are going to inc
 
 ## `ARDL` version 0.1.1
 
-It starts with the version 0.1.1 which adds some extra features in the `multipliers` function. This new release also includes some minor corrections in the documentation.
+It starts with version 0.1.1 which adds some extra features in the `multipliers` function. This new release also includes some minor corrections in the documentation.
 
 Now you can use the `multipliers` function to calculate the dynamic effects making use of not only the Long-Run multipliers but also the Short-Run and any Interim multipliers!
 
-This is useful as you can get the instant impact (Short-Run) of a variable's change, or the impact in 1, 2 or whatever number of periods ahead you want. And it is as easy as specifying the type (for long or short run) or the number of periods for the interim multipliers. For example:
+This is useful as you can get the instant impact (Short-Run) of a variable change, or the impact in 1, 2 or whatever number of periods ahead you want. And it is as easy as specifying the type (for long or short run) or the number of periods for the interim multipliers. For example:
 
-```
+```{r eval=FALSE, include=TRUE}
 # Long-Run multipliers
 multipliers(object, type = "lr") # or simply multipliers(object) as it is the default
 
@@ -40,5 +40,11 @@ multipliers(object, type = 4) # Example for the dynamic effect in 4 periods ahea
 ```
 
 Where the object can be either an ARDL or an UECM model. We are not getting into technicalities here, so we highly recommend reading the [manual](https://cran.r-project.org/web/packages/ARDL/ARDL.pdf) if you are interested in the underlying mathematics. You will also notice how many quirky calculations you get rid of, including potential mistakes in the process but most importantly, your valuable time!
+
+Also, if you use the [`ARDL`](https://CRAN.R-project.org/package=ARDL) package in your publications, please cite the new version as:
+  
+Kleanthis Natsiopoulos and Nickolaos Tzeremes (2021). *ARDL: ARDL, ECM and Bounds-Test for Cointegration*. R package version 0.1.1. https://CRAN.R-project.org/package=ARDL
+
+## Be part of the evolution
 
 Keep sending me your valuable suggestions, comments or problems you face using the package. Feel free to contact me via e-mail, [linkedin](www.linkedin.com/in/kleanthis-natsiopoulos) or [twitter](https://twitter.com/klnatsio), or raise an issue in the [GitHub repo](https://github.com/Natsiopoulos/ARDL).

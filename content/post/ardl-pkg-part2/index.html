@@ -3,7 +3,7 @@ title: '''ARDL'' R package v0.1.1 Part 2: Multipliers'
 author: "Kleanthis Natsiopoulos"
 date: '2021-01-25'
 image:
-  caption: 'Image credit: [**Nikos Chatsios**](https://www.deviantart.com/favloskyknos)'
+  caption: 'Image credit: [**Nikos Chatsios**](https://www.instagram.com/favlos_kyknos/)'
   focal_point: Center
 slug: ardl-pkg-part2
 subtitle: Long, short and interim multipliers
@@ -21,10 +21,10 @@ categories: []
 <p>The next versions are going to be released frequently, and they are going to include some minor but very useful features that you have asked for. Also, many of you have asked for more advanced models, so that the package can keep up with the latest developments in the literature. These will be more sparse but major updates.</p>
 <div id="ardl-version-0.1.1" class="section level2">
 <h2><code>ARDL</code> version 0.1.1</h2>
-<p>It starts with the version 0.1.1 which adds some extra features in the <code>multipliers</code> function. This new release also includes some minor corrections in the documentation.</p>
+<p>It starts with version 0.1.1 which adds some extra features in the <code>multipliers</code> function. This new release also includes some minor corrections in the documentation.</p>
 <p>Now you can use the <code>multipliers</code> function to calculate the dynamic effects making use of not only the Long-Run multipliers but also the Short-Run and any Interim multipliers!</p>
-<p>This is useful as you can get the instant impact (Short-Run) of a variable’s change, or the impact in 1, 2 or whatever number of periods ahead you want. And it is as easy as specifying the type (for long or short run) or the number of periods for the interim multipliers. For example:</p>
-<pre><code># Long-Run multipliers
+<p>This is useful as you can get the instant impact (Short-Run) of a variable change, or the impact in 1, 2 or whatever number of periods ahead you want. And it is as easy as specifying the type (for long or short run) or the number of periods for the interim multipliers. For example:</p>
+<pre class="r"><code># Long-Run multipliers
 multipliers(object, type = &quot;lr&quot;) # or simply multipliers(object) as it is the default
 
 # Short-Run multipliers
@@ -33,5 +33,10 @@ multipliers(object, type = &quot;sr&quot;) # equivalent to multipliers(object, t
 # Interim multipliers
 multipliers(object, type = 4) # Example for the dynamic effect in 4 periods ahead</code></pre>
 <p>Where the object can be either an ARDL or an UECM model. We are not getting into technicalities here, so we highly recommend reading the <a href="https://cran.r-project.org/web/packages/ARDL/ARDL.pdf">manual</a> if you are interested in the underlying mathematics. You will also notice how many quirky calculations you get rid of, including potential mistakes in the process but most importantly, your valuable time!</p>
+<p>Also, if you use the <a href="https://CRAN.R-project.org/package=ARDL"><code>ARDL</code></a> package in your publications, please cite the new version as:</p>
+<p>Kleanthis Natsiopoulos and Nickolaos Tzeremes (2021). <em>ARDL: ARDL, ECM and Bounds-Test for Cointegration</em>. R package version 0.1.1. <a href="https://CRAN.R-project.org/package=ARDL" class="uri">https://CRAN.R-project.org/package=ARDL</a></p>
+</div>
+<div id="be-part-of-the-evolution" class="section level2">
+<h2>Be part of the evolution</h2>
 <p>Keep sending me your valuable suggestions, comments or problems you face using the package. Feel free to contact me via e-mail, <a href="www.linkedin.com/in/kleanthis-natsiopoulos">linkedin</a> or <a href="https://twitter.com/klnatsio">twitter</a>, or raise an issue in the <a href="https://github.com/Natsiopoulos/ARDL">GitHub repo</a>.</p>
 </div>
