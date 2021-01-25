@@ -2,22 +2,22 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Publications on Kleanthis Natsiopoulos</title>
-    <link>/publication/</link>
+    <link>https://natsiopoulos.netlify.app/publication/</link>
     <description>Recent content in Publications on Kleanthis Natsiopoulos</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <copyright>&amp;copy; 2020</copyright>
+    <copyright>&amp;copy; 2021</copyright>
     <lastBuildDate>Sun, 16 Dec 2018 00:00:00 +0200</lastBuildDate>
     
-	<atom:link href="/publication/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://natsiopoulos.netlify.app/publication/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>An ARDL approach for income inequality: Case studies for France, Greece, UK and USA</title>
-      <link>/publication/tis-ardl-conference-poster/</link>
+      <link>https://natsiopoulos.netlify.app/publication/tis-ardl-conference-poster/</link>
       <pubDate>Sun, 16 Dec 2018 00:00:00 +0200</pubDate>
       
-      <guid>/publication/tis-ardl-conference-poster/</guid>
+      <guid>https://natsiopoulos.netlify.app/publication/tis-ardl-conference-poster/</guid>
       <description></description>
     </item>
     

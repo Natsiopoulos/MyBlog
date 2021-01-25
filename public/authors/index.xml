@@ -2,31 +2,31 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Authors on Kleanthis Natsiopoulos</title>
-    <link>/authors/</link>
+    <link>https://natsiopoulos.netlify.app/authors/</link>
     <description>Recent content in Authors on Kleanthis Natsiopoulos</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <copyright>&amp;copy; 2020</copyright>
+    <copyright>&amp;copy; 2021</copyright>
     <lastBuildDate>Sun, 16 Dec 2018 00:00:00 +0200</lastBuildDate>
     
-	<atom:link href="/authors/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://natsiopoulos.netlify.app/authors/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Alexandra Livada</title>
-      <link>/authors/alexandra-livada/</link>
+      <link>https://natsiopoulos.netlify.app/authors/alexandra-livada/</link>
       <pubDate>Sun, 16 Dec 2018 00:00:00 +0200</pubDate>
       
-      <guid>/authors/alexandra-livada/</guid>
+      <guid>https://natsiopoulos.netlify.app/authors/alexandra-livada/</guid>
       <description></description>
     </item>
     
     <item>
       <title>admin</title>
-      <link>/authors/admin/</link>
+      <link>https://natsiopoulos.netlify.app/authors/admin/</link>
       <pubDate>Sun, 16 Dec 2018 00:00:00 +0200</pubDate>
       
-      <guid>/authors/admin/</guid>
+      <guid>https://natsiopoulos.netlify.app/authors/admin/</guid>
       <description></description>
     </item>
     

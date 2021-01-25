@@ -2,22 +2,22 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>do it right on Kleanthis Natsiopoulos</title>
-    <link>/categories/do-it-right/</link>
+    <link>https://natsiopoulos.netlify.app/categories/do-it-right/</link>
     <description>Recent content in do it right on Kleanthis Natsiopoulos</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <copyright>&amp;copy; 2020</copyright>
+    <copyright>&amp;copy; 2021</copyright>
     <lastBuildDate>Mon, 11 Feb 2019 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="/categories/do-it-right/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://natsiopoulos.netlify.app/categories/do-it-right/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Three types of ANOVA</title>
-      <link>/post/anova-types/anova-types/</link>
+      <link>https://natsiopoulos.netlify.app/post/anova-types/anova-types/</link>
       <pubDate>Mon, 11 Feb 2019 00:00:00 +0000</pubDate>
       
-      <guid>/post/anova-types/anova-types/</guid>
+      <guid>https://natsiopoulos.netlify.app/post/anova-types/anova-types/</guid>
       <description>This is the first post of the series do it right. This series consist of posts that aim to give an alternative and simple view on usual misunderstandings and misuses of methods.
 ANOVA is taught in the university as one of our first steps in statistics after some basic probability theory, distributions and t-test. It is used as a means of measuring the differences among sample means and is practically an F-test.</description>
     </item>
