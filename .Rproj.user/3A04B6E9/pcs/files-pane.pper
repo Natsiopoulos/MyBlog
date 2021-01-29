@@ -1,9 +1,0 @@
-{
-    "path" : "~/MyBlog",
-    "sortOrder" : [
-        {
-            "ascending" : true,
-            "columnIndex" : 2
-        }
-    ]
-}
