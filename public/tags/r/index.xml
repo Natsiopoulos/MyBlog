@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>R on Kleanthis Natsiopoulos</title>
+    <link>https://natsiopoulos.netlify.app/tags/r/</link>
+    <description>Recent content in R on Kleanthis Natsiopoulos</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>&amp;copy; 2021</copyright>
+    <lastBuildDate>Mon, 25 Jan 2021 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="https://natsiopoulos.netlify.app/tags/r/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>&#39;ARDL&#39; R package v0.1.1 Part 2: Multipliers</title>
+      <link>https://natsiopoulos.netlify.app/post/ardl-pkg-part2/ardl-pkg-part2/</link>
+      <pubDate>Mon, 25 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>https://natsiopoulos.netlify.app/post/ardl-pkg-part2/ardl-pkg-part2/</guid>
+      <description>2021 started with a new version of the ARDL package! My supervisor Professor Nickolaos Tzeremes and myself would like to thank you all for the support and the useful comments towards the improvement of the package.
+Since the ARDL package is starting to be the standard for the R community regarding the ARDL modeling and the bounds test for cointegration, we decided to expand its capabilities with new features. We have considered your recommendations and we are planning a series of new releases.</description>
+    </item>
+    
+    <item>
+      <title>The new &#39;ARDL&#39; R package. Part 1: Bounds-test advantages</title>
+      <link>https://natsiopoulos.netlify.app/post/ardl-pkg-part1/ardl-pkg-part1/</link>
+      <pubDate>Mon, 13 Apr 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://natsiopoulos.netlify.app/post/ardl-pkg-part1/ardl-pkg-part1/</guid>
+      <description>I am glad to anounce that my new ARDL package has been published on CRAN! This is part of my Ph.D. at the University of Thessaly under the supervision of the Associate Professor Nickolaos Tzeremes.
+The ARDL package functionality consists mainly of three things (more to come in future updates):
+Dynamic time-series regression models (ARDL and ECM)
+Bounds-test for cointegration (Pesaran et al. (2001))
+Long-run multipliers (short-run and interim multipliers are comming in the next update)</description>
+    </item>
+    
+    <item>
+      <title>Wald-test function in Julia</title>
+      <link>https://natsiopoulos.netlify.app/post/wald-test-julia/wald-test-julia/</link>
+      <pubDate>Thu, 26 Sep 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://natsiopoulos.netlify.app/post/wald-test-julia/wald-test-julia/</guid>
+      <description>It all started when I was trying to do some joint restriction on the regression’s coefficients… in Julia… and I failed… And this is because there is no function (at least yet) to perform a Wald test on the estimated regression model. So I made it! In short, I just rewrote the wald.test function from the aod package in R, and created a new function for Julia. It’s called, guess what… wald_test.</description>
+    </item>
+    
+    <item>
+      <title>Three types of ANOVA</title>
+      <link>https://natsiopoulos.netlify.app/post/anova-types/anova-types/</link>
+      <pubDate>Mon, 11 Feb 2019 00:00:00 +0000</pubDate>
+      
+      <guid>https://natsiopoulos.netlify.app/post/anova-types/anova-types/</guid>
+      <description>This is the first post of the series do it right. This series consist of posts that aim to give an alternative and simple view on usual misunderstandings and misuses of methods.
+ANOVA is taught in the university as one of our first steps in statistics after some basic probability theory, distributions and t-test. It is used as a means of measuring the differences among sample means and is practically an F-test.</description>
+    </item>
+    
+  </channel>
+</rss>
